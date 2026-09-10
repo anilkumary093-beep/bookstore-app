@@ -1,0 +1,377 @@
+<section class="book-store">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="container hero-content">
+      <div>
+        <span class="hero-tag">WELCOME TO BOOKNOOK</span>
+
+        <h1>Discover Your Next Great Read</h1>
+
+        <p>
+          Explore handpicked books across programming, fiction,
+          self-help and more.
+        </p>
+
+        <a href="#books" class="shop-btn">
+          Explore Books →
+        </a>
+      </div>
+
+      <div class="hero-books">
+        📚
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CATEGORIES -->
+  <div class="container categories">
+
+    <h2>Browse Categories</h2>
+
+    <div class="category-list">
+
+      <button class="category-btn active" data-filter="all">
+        All Books
+      </button>
+
+      <button class="category-btn" data-filter="Programming">
+        Programming
+      </button>
+
+      <button class="category-btn" data-filter="Fiction">
+        Fiction
+      </button>
+
+      <button class="category-btn" data-filter="Self-Help">
+        Self-Help
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- BOOKS -->
+  <div class="container books-section" id="books">
+
+    <div class="section-heading">
+
+      <div>
+        <span>OUR COLLECTION</span>
+        <h2>Featured Books</h2>
+      </div>
+
+      <a href="{{ routes.all_products_collection_url }}">
+        View All →
+      </a>
+
+    </div>
+
+
+    <div class="book-grid">
+
+      {% if section.settings.collection != blank %}
+
+        {% for product in section.settings.collection.products %}
+
+          <div
+            class="book-card"
+            data-category="{{ product.type }}"
+          >
+
+            <a href="{{ product.url }}" class="book-image">
+
+              {% if product.featured_image %}
+
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.title | escape }}"
+                  width="600"
+                  height="750"
+                  loading="lazy"
+                >
+
+              {% endif %}
+
+
+              {% if product.compare_at_price > product.price %}
+
+                <span class="sale-badge">
+                  SALE
+                </span>
+
+              {% endif %}
+
+            </a>
+
+
+            <div class="book-info">
+
+              <span class="category-badge">
+                {{ product.type | default: 'Book' }}
+              </span>
+
+
+              <a href="{{ product.url }}">
+
+                <h3>
+                  {{ product.title }}
+                </h3>
+
+              </a>
+
+
+              <p class="author">
+                {{ product.vendor | default: 'BookNook' }}
+              </p>
+
+
+              <div class="rating">
+                ★★★★★
+              </div>
+
+
+              <div class="card-footer">
+
+                <div class="price">
+                  {{ product.price | money }}
+                </div>
+
+
+                <form
+                  action="{{ routes.cart_add_url }}"
+                  method="post"
+                >
+
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                  >
+
+
+                  <button
+                    type="submit"
+                    class="add-btn"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+
+                    {% if product.available %}
+                      Add to Cart
+                    {% else %}
+                      Sold Out
+                    {% endif %}
+
+                  </button>
+
+                </form>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        {% endfor %}
+
+      {% else %}
+
+        <p>
+          Please select a collection from the Theme Editor.
+        </p>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+
+  <!-- WHY BOOKNOOK -->
+  <section class="why-section">
+
+    <div class="container">
+
+      <div class="section-heading center">
+
+        <span>WHY BOOKNOOK?</span>
+
+        <h2>
+          Everything You Need in One Place
+        </h2>
+
+      </div>
+
+
+      <div class="features">
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            📚
+          </div>
+
+          <h3>
+            Curated Collection
+          </h3>
+
+          <p>
+            Carefully selected books for every reader.
+          </p>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            🚚
+          </div>
+
+          <h3>
+            Fast Delivery
+          </h3>
+
+          <p>
+            Get your favourite books delivered quickly.
+          </p>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            🔒
+          </div>
+
+          <h3>
+            Secure Shopping
+          </h3>
+
+          <p>
+            Safe and reliable Shopify checkout.
+          </p>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            ⭐
+          </div>
+
+          <h3>
+            Quality Books
+          </h3>
+
+          <p>
+            Discover books worth adding to your shelf.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const buttons = document.querySelectorAll(".category-btn");
+
+  const books = document.querySelectorAll(".book-card");
+
+
+  buttons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+      buttons.forEach(function (btn) {
+
+        btn.classList.remove("active");
+
+      });
+
+
+      this.classList.add("active");
+
+
+      const filter = this.dataset.filter;
+
+
+      books.forEach(function (book) {
+
+        if (
+          filter === "all" ||
+          book.dataset.category === filter
+        ) {
+
+          book.style.display = "";
+
+        } else {
+
+          book.style.display = "none";
+
+        }
+
+      });
+
+    });
+
+  });
+
+});
+
+</script>
+
+
+{% schema %}
+
+{
+  "name": "Book Store",
+
+  "settings": [
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover Your Next Great Read"
+    },
+
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Explore programming, fiction and productivity books."
+    },
+
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Book Collection"
+    }
+
+  ],
+
+  "presets": [
+
+    {
+      "name": "Book Store"
+    }
+
+  ]
+
+}
+
+{% endschema %}

@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "book_store": {
+      "type": "book-store",
+      "settings": {
+        "heading": "Discover Your Next Great Read",
+        "description": "Explore programming, fiction and productivity books.",
+        "collection": "books"
+      }
+    }
+  },
+  "order": [
+    "book_store"
+  ]
+}

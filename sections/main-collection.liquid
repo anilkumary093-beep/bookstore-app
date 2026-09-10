@@ -1,0 +1,147 @@
+<section class="collection-page">
+
+  <div class="container">
+
+    <div class="collection-header">
+
+      <span>BOOKNOOK COLLECTION</span>
+
+      <h1>{{ collection.title }}</h1>
+
+      {% if collection.description != blank %}
+        <p>{{ collection.description }}</p>
+      {% else %}
+        <p>
+          Explore our collection of carefully selected books.
+        </p>
+      {% endif %}
+
+    </div>
+
+
+    {% if collection.products_count > 0 %}
+
+      <div class="book-grid">
+
+        {% for product in collection.products %}
+
+          <div class="book-card">
+
+            <a href="{{ product.url }}" class="book-image">
+
+              {% if product.featured_image %}
+
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.title | escape }}"
+                  width="600"
+                  height="750"
+                  loading="lazy"
+                >
+
+              {% endif %}
+
+            </a>
+
+
+            <div class="book-info">
+
+              <span class="category-badge">
+                {{ product.type | default: 'Book' }}
+              </span>
+
+
+              <a href="{{ product.url }}">
+
+                <h3>
+                  {{ product.title }}
+                </h3>
+
+              </a>
+
+
+              <p class="author">
+                {{ product.vendor | default: 'BookNook' }}
+              </p>
+
+
+              <div class="rating">
+                ★★★★★
+              </div>
+
+
+              <div class="card-footer">
+
+                <div class="price">
+                  {{ product.price | money }}
+                </div>
+
+
+                <form
+                  action="{{ routes.cart_add_url }}"
+                  method="post"
+                >
+
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                  >
+
+
+                  <button
+                    type="submit"
+                    class="add-btn"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+
+                    {% if product.available %}
+                      Add to Cart
+                    {% else %}
+                      Sold Out
+                    {% endif %}
+
+                  </button>
+
+                </form>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        {% endfor %}
+
+      </div>
+
+
+    {% else %}
+
+      <div class="empty-cart">
+
+        <h2>
+          No books found
+        </h2>
+
+        <p>
+          Please add products to this collection.
+        </p>
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
+</section>
+
+
+{% schema %}
+
+{
+  "name": "Main Collection",
+  "settings": []
+}
+
+{% endschema %}

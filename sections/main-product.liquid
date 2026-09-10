@@ -1,0 +1,159 @@
+<section class="product-page">
+
+  <div class="container">
+
+    <div class="product-layout">
+
+      <!-- PRODUCT IMAGE -->
+      <div class="product-image-large">
+
+        {% if product.featured_image %}
+
+          <img
+            src="{{ product.featured_image | image_url: width: 900 }}"
+            alt="{{ product.title | escape }}"
+            width="900"
+            height="1100"
+          >
+
+        {% endif %}
+
+      </div>
+
+
+      <!-- PRODUCT DETAILS -->
+      <div class="product-details">
+
+        <span class="category-badge">
+          {{ product.type | default: 'Book' }}
+        </span>
+
+        <h1>{{ product.title }}</h1>
+
+        <p class="product-author">
+          By {{ product.vendor | default: 'BookNook' }}
+        </p>
+
+        <div class="rating">
+          ★★★★★
+          <span>5.0</span>
+        </div>
+
+        <div class="product-price">
+          {{ product.price | money }}
+        </div>
+
+        {% if product.description != blank %}
+
+          <div class="product-description">
+            {{ product.description }}
+          </div>
+
+        {% endif %}
+
+
+        {% form 'product', product %}
+
+          {% unless product.has_only_default_variant %}
+
+            <label for="variant-select">
+              Select Option
+            </label>
+
+            <select
+              name="id"
+              id="variant-select"
+              class="variant-select"
+            >
+
+              {% for variant in product.variants %}
+
+                <option
+                  value="{{ variant.id }}"
+                  {% unless variant.available %}disabled{% endunless %}
+                >
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+
+              {% endfor %}
+
+            </select>
+
+          {% else %}
+
+            <input
+              type="hidden"
+              name="id"
+              value="{{ product.selected_or_first_available_variant.id }}"
+            >
+
+          {% endunless %}
+
+
+          <div class="quantity-box">
+
+            <label for="quantity">
+              Quantity
+            </label>
+
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              value="1"
+              min="1"
+            >
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="product-add-btn"
+            {% unless product.available %}disabled{% endunless %}
+          >
+
+            {% if product.available %}
+              Add to Cart →
+            {% else %}
+              Sold Out
+            {% endif %}
+
+          </button>
+
+        {% endform %}
+
+
+        <div class="product-benefits">
+
+          <div>
+            📦 <strong>Fast Delivery</strong>
+          </div>
+
+          <div>
+            🔒 <strong>Secure Checkout</strong>
+          </div>
+
+          <div>
+            ↩️ <strong>Easy Returns</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+{% schema %}
+
+{
+  "name": "Main Product",
+  "settings": []
+}
+
+{% endschema %}

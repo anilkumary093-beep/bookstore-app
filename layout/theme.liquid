@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>
+    {{ page_title }}
+    {% unless page_title contains shop.name %}
+      - {{ shop.name }}
+    {% endunless %}
+  </title>
+
+  {{ content_for_header }}
+
+  {{ 'style.css' | asset_url | stylesheet_tag }}
+</head>
+
+<body>
+
+  <header class="site-header">
+
+    <div class="container header-inner">
+
+      <a href="{{ routes.root_url }}" class="logo">
+        📚 BookNook
+      </a>
+
+      <div class="header-actions">
+
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          class="search-form"
+        >
+
+          <input
+            type="search"
+            name="q"
+            placeholder="Search books..."
+            value="{{ search.terms | escape }}"
+          >
+
+          <button type="submit">
+            🔍
+          </button>
+
+        </form>
+
+        <nav>
+
+          <a href="{{ routes.root_url }}">
+            Home
+          </a>
+
+          <a href="{{ collections['books'].url }}">
+            Books
+          </a>
+
+          <a href="/pages/about-us">
+            About
+          </a>
+
+          <a href="/pages/contact-us">
+            Contact
+          </a>
+
+          <a href="/pages/faq">
+            FAQ
+          </a>
+
+          <a href="{{ routes.account_login_url }}">
+            {% if customer %}
+              Account
+            {% else %}
+              Login
+            {% endif %}
+          </a>
+
+          <a href="{{ routes.cart_url }}">
+            Cart ({{ cart.item_count }})
+          </a>
+
+        </nav>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main>
+    {{ content_for_layout }}
+  </main>
+
+  <footer class="site-footer">
+
+    <p>
+      © {{ 'now' | date: '%Y' }} BookNook. All rights reserved.
+    </p>
+
+  </footer>
+
+</body>
+
+</html>

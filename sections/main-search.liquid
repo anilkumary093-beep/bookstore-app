@@ -1,0 +1,169 @@
+<section class="search-page">
+
+  <div class="container">
+
+    <div class="search-header">
+
+      <span>BOOKNOOK SEARCH</span>
+
+      <h1>Search Results</h1>
+
+      {% if search.performed %}
+
+        <p>
+          Results for:
+          <strong>"{{ search.terms | escape }}"</strong>
+        </p>
+
+      {% endif %}
+
+    </div>
+
+
+    {% if search.performed %}
+
+      {% if search.results_count > 0 %}
+
+        <div class="book-grid">
+
+          {% for item in search.results %}
+
+            {% if item.object_type == 'product' %}
+
+              <div class="book-card">
+
+                <a
+                  href="{{ item.url }}"
+                  class="book-image"
+                >
+
+                  {% if item.featured_image %}
+
+                    <img
+                      src="{{ item.featured_image | image_url: width: 600 }}"
+                      alt="{{ item.title | escape }}"
+                      width="600"
+                      height="750"
+                      loading="lazy"
+                    >
+
+                  {% endif %}
+
+                </a>
+
+
+                <div class="book-info">
+
+                  <span class="category-badge">
+                    {{ item.type | default: 'Book' }}
+                  </span>
+
+
+                  <a href="{{ item.url }}">
+
+                    <h3>
+                      {{ item.title }}
+                    </h3>
+
+                  </a>
+
+
+                  <p class="author">
+                    {{ item.vendor | default: 'BookNook' }}
+                  </p>
+
+
+                  <div class="rating">
+                    ★★★★★
+                  </div>
+
+
+                  <div class="card-footer">
+
+                    <div class="price">
+                      {{ item.price | money }}
+                    </div>
+
+
+                    <a
+                      href="{{ item.url }}"
+                      class="add-btn"
+                    >
+                      View Book
+                    </a>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            {% endif %}
+
+          {% endfor %}
+
+        </div>
+
+
+      {% else %}
+
+        <div class="empty-cart">
+
+          <div class="empty-icon">
+            🔍
+          </div>
+
+          <h2>
+            No books found
+          </h2>
+
+          <p>
+            We couldn't find any books matching
+            "{{ search.terms }}".
+          </p>
+
+          <a
+            href="{{ routes.root_url }}"
+            class="shop-btn"
+          >
+            Back to Home →
+          </a>
+
+        </div>
+
+      {% endif %}
+
+
+    {% else %}
+
+      <div class="empty-cart">
+
+        <div class="empty-icon">
+          🔍
+        </div>
+
+        <h2>
+          Search for a book
+        </h2>
+
+        <p>
+          Use the search bar above to find your favourite books.
+        </p>
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
+</section>
+
+
+{% schema %}
+
+{
+  "name": "Main Search",
+  "settings": []
+}
+
+{% endschema %}

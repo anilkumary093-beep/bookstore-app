@@ -1,0 +1,13 @@
+[
+  {
+    "name": "BookNook Settings",
+    "settings": [
+      {
+        "type": "text",
+        "id": "store_name",
+        "label": "Store Name",
+        "default": "BookNook"
+      }
+    ]
+  }
+]
